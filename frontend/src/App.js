@@ -4,7 +4,7 @@ import HomeContainer from './components/home/HomeContainer';
 import AuthContainer from './components/auth/AuthContainer';
 
 const App = () => {
-  const [showAuth, setShowAuth] = useState(false);
+  const [showAuth, setShowAuth] = useState(false)
 
   const handleRegisterClick = () => {
     setShowAuth(true);
