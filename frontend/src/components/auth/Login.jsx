@@ -18,17 +18,19 @@ const Login = () => {
     }));
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin =  (e) => {
     e.preventDefault();
 
-    try {
-      await authService.login(loginData);
-      console.log('Login successful');
-      navigate('/books'); // Redirect to BooksPage after successful login
-    } catch (error) {
-      console.error('Login failed', error.message);
-      alert('Login failed. Please check your credentials.');
-    }
+    console.log('Login data:', loginData);
+
+    authService.login(loginData);
+    // try {
+    //   console.log('Login successful');
+    //   // navigate('/books'); // Redirect to BooksPage after successful login
+    // } catch (error) {
+    //   console.error('Login failed', error.message);
+    //   alert('Login failed. Please check your credentials.');
+    // }
   };
 
 

@@ -41,20 +41,25 @@ app.post("/register", async (req, res) => {
 })
 
 app.post('/login', async(req,res)=>{
-    const {studentID,password} = req.body;
+    const {studentId,password} = req.body;
+    console.log(studentId,"studentID",password);
 
-    const user = await UserModel.findOne({studentID})
+    const user = await UserModel.findOne({studentID:studentId})
+   
     if(!user){
-        return res.send({msg:"User not found, please signup"})
+        return res.send({msg:"User not found, please signup",status:"NotFound"})
     }
 
     const hash = user.password
+    // console.log(hash,user,studentID,password);
     bcrypt.compare(password,hash, function(err,result){
+        
         if(result){
             const token = jwt.sign({userID : user._id}, "bookManagemet")
-            return res.send({mas:"Login successfull", token})
+            return res.send({msg:"Login successfull", token, status:"Sucuss"})
+
         }else{
-            return res.send({msg:"Invalid credentials"})
+            return res.send({msg:"Invalid credentials",status:"Invalid"})
         }
     })
 

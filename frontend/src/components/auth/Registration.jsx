@@ -27,7 +27,7 @@ const Registration = () => {
     try {
       await authService.register(formData);
       console.log('Registration successful');
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error('Registration failed', error.message);
     }
