@@ -88,21 +88,14 @@ bookRouter.get('/allbooks', async (req, res) => {
 //     }
 //   });
   
-//   bookRouter.delete('/:id', async (req, res) => {
-//     try {
-//       const deletedBook = await BookModel.findByIdAndDelete(req.params.id);
-  
-//       if (!deletedBook) {
-//         return res.status(404).json({ message: 'Book not found' });
-//       }
-  
-//       res.status(200).json({ message: 'Book deleted successfully' });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ message: 'Internal Server Error' });
-//     }
-//   });
-  
+  bookRouter.delete('/books/:id', async (req, res) => {
+    try {
+      await Book.findByIdAndRemove(req.params.id);
+      res.json({ message: 'Book deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
   
   
 

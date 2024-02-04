@@ -21,7 +21,7 @@ const Login = () => {
   const handleLogin =  (e) => {
     e.preventDefault();
 
-    console.log('Login data:', loginData);
+    // console.log('Login data:', loginData);
 
     authService.login(loginData);
     // try {

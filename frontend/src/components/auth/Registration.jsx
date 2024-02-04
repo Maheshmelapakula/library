@@ -9,6 +9,7 @@ const Registration = () => {
     username: '',
     studentID: '',
     department: '',
+    role:'',
     email: '',
     password: '',
   });
@@ -65,6 +66,17 @@ const Registration = () => {
             type="text"
             name="department"
             value={formData.department}
+            onChange={handleInputChange}
+            required
+            style={styles.input}
+          />
+        </label>
+        <label style={styles.label}>
+          Role:
+          <input
+            type="text"
+            name="role"
+            value={formData.role}
             onChange={handleInputChange}
             required
             style={styles.input}

@@ -1,6 +1,6 @@
 // components/books/BooksList.js
 import React, { useEffect, useState } from 'react';
-import BookService from '../../services/bookService';
+import BookService from '../../services/BookService'; // Adjust the import path accordingly
 
 const BooksList = () => {
   const [books, setBooks] = useState([]);
@@ -15,6 +15,7 @@ const BooksList = () => {
       setBooks(booksData);
     } catch (error) {
       // Handle error as needed
+      console.error('Error fetching books:', error.message);
     }
   };
 

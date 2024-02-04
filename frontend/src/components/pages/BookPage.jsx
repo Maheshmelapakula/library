@@ -28,6 +28,7 @@ const BooksPage = () => {
       await deleteBook(id);
       fetchBooks(); // Refresh the books after deletion
     } catch (error) {
+      console.error('Error deleting book:', error.message);
       // Handle error as needed
     }
   };
@@ -59,12 +60,14 @@ const BooksPage = () => {
       } else {
         // If not editing, proceed with creating a new book
         await createBook(newBookData);
-      }
 
-      // Close the modal after creating/updating a book
-      handleCreateModalClose();
-      // Refresh the books list
-      fetchBooks();
+        // Close the modal after creating a new book
+        handleCreateModalClose();
+        // Refresh the books list
+        fetchBooks();
+        // Clear new book data after successful creation
+        setNewBookData({ title: '', author: '', journal: '' });
+      }
     } catch (error) {
       console.error('Error creating/updating book:', error.message);
     }
@@ -116,11 +119,11 @@ const BooksPage = () => {
       </button>
       <div style={styles.filters}>
         <label>
-         Search:
+          Search:
           <input type="text" value={filter} onChange={handleFilterChange} />
         </label>
         <label>
-        Filter:
+          Filter:
           <select value={sortBy} onChange={handleSortChange}>
             <option value="title">Title</option>
             <option value="author">Author</option>
@@ -128,7 +131,7 @@ const BooksPage = () => {
           </select>
         </label>
         <label>
-        Sort By:
+          Sort By:
           <select value={sortOrder} onChange={handleOrderChange}>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
@@ -178,13 +181,13 @@ const BooksPage = () => {
               Journal:
               <input type="text" name="journal" value={newBookData.journal} onChange={handleInputChange} />
             </label>
+            <button type="button" style={styles.buttonCreate} onClick={handleCreateBook}>
+              {editBookId ? 'Update Book' : 'Create Book'}
+            </button>
+            <button type="button" style={styles.buttonCancel} onClick={handleCreateModalClose}>
+              Cancel
+            </button>
           </form>
-          <button style={styles.buttonCreate} onClick={handleCreateBook}>
-            {editBookId ? 'Update Book' : 'Create Book'}
-          </button>
-          <button style={styles.buttonCancel} onClick={handleCreateModalClose}>
-            Cancel
-          </button>
         </div>
       )}
     </div>
