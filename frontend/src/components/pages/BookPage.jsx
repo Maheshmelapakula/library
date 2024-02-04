@@ -6,9 +6,9 @@ const BooksPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newBookData, setNewBookData] = useState({ title: '', author: '', journal: '' });
   const [editBookId, setEditBookId] = useState(null);
-  const [filter, setFilter] = useState(''); // Filter criteria
-  const [sortBy, setSortBy] = useState('title'); // Default sorting by title
-  const [sortOrder, setSortOrder] = useState('asc'); // Default sorting order
+  const [filter, setFilter] = useState('');
+  const [sortBy, setSortBy] = useState('title');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     fetchBooks();
@@ -99,37 +99,15 @@ const BooksPage = () => {
     );
   });
 
-  // Apply filtering based on title, author, or journal
-// const filteredBooks = books
-// .filter((book) => {
-//   return (
-//     (book.title && book.title.toLowerCase().includes(filter.toLowerCase())) ||
-//     (book.author && book.author.toLowerCase().includes(filter.toLowerCase())) ||
-//     (book.journal && book.journal.toLowerCase().includes(filter.toLowerCase()))
-//   );
-// })
-// .filter((book) => {
-//   // Filter books created within the last 10 minutes
-//   const creationTimestamp = new Date(book.createdAt).getTime();
-//   const currentTimestamp = new Date().getTime();
-//   const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
-
-//   if (currentTimestamp - creationTimestamp <= tenMinutesInMilliseconds) {
-//     return true; // Book created within the last 10 minutes
-//   }
-
-//   return false;
-// });
-
-  
   // Apply sorting based on sortBy and sortOrder
   const sortedBooks = [...filteredBooks].sort((a, b) => {
     const aValue = a[sortBy] || ''; // Use an empty string if the property is undefined
     const bValue = b[sortBy] || ''; // Use an empty string if the property is undefined
-  
+
     // Compare the values using localeCompare
     return aValue.localeCompare(bValue);
   });
+
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Books</h1>
@@ -138,11 +116,11 @@ const BooksPage = () => {
       </button>
       <div style={styles.filters}>
         <label>
-          Filter:
+         Search:
           <input type="text" value={filter} onChange={handleFilterChange} />
         </label>
         <label>
-          Sort By:
+        Filter:
           <select value={sortBy} onChange={handleSortChange}>
             <option value="title">Title</option>
             <option value="author">Author</option>
@@ -150,7 +128,7 @@ const BooksPage = () => {
           </select>
         </label>
         <label>
-          Order:
+        Sort By:
           <select value={sortOrder} onChange={handleOrderChange}>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
@@ -173,16 +151,10 @@ const BooksPage = () => {
               <td>{book.author}</td>
               <td>{book.journal}</td>
               <td>
-                <button
-                  style={styles.buttonEdit}
-                  onClick={() => handleEdit(book._id)}
-                >
+                <button style={styles.buttonEdit} onClick={() => handleEdit(book._id)}>
                   Edit
                 </button>
-                <button
-                  style={styles.buttonDelete}
-                  onClick={() => handleDelete(book._id)}
-                >
+                <button style={styles.buttonDelete} onClick={() => handleDelete(book._id)}>
                   Delete
                 </button>
               </td>
@@ -190,37 +162,21 @@ const BooksPage = () => {
           ))}
         </tbody>
       </table>
-      {/* Create/Edit Book Modal */}
       {showCreateModal && (
         <div style={styles.modal}>
           <h2>{editBookId ? 'Edit Book' : 'Create a New Book'}</h2>
           <form>
             <label>
               Title:
-              <input
-                type="text"
-                name="title"
-                value={newBookData.title}
-                onChange={handleInputChange}
-              />
+              <input type="text" name="title" value={newBookData.title} onChange={handleInputChange} />
             </label>
             <label>
               Author:
-              <input
-                type="text"
-                name="author"
-                value={newBookData.author}
-                onChange={handleInputChange}
-              />
+              <input type="text" name="author" value={newBookData.author} onChange={handleInputChange} />
             </label>
             <label>
               Journal:
-              <input
-                type="text"
-                name="journal"
-                value={newBookData.journal}
-                onChange={handleInputChange}
-              />
+              <input type="text" name="journal" value={newBookData.journal} onChange={handleInputChange} />
             </label>
           </form>
           <button style={styles.buttonCreate} onClick={handleCreateBook}>
@@ -240,10 +196,12 @@ const styles = {
     maxWidth: '800px',
     margin: '0 auto',
     padding: '20px',
+    fontFamily: 'Arial, sans-serif',
   },
   heading: {
     fontSize: '24px',
     marginBottom: '20px',
+    color: '#333',
   },
   createButton: {
     backgroundColor: '#28a745',
@@ -254,6 +212,12 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     marginBottom: '20px',
+  },
+  filters: {
+    marginBottom: '20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   table: {
     width: '100%',
@@ -285,6 +249,7 @@ const styles = {
     borderRadius: '5px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     zIndex: '1000',
+    fontFamily: 'Arial, sans-serif',
   },
   buttonCreate: {
     backgroundColor: '#28a745',
@@ -300,9 +265,6 @@ const styles = {
     padding: '8px 12px',
     border: 'none',
     cursor: 'pointer',
-  },
-  filters: {
-    marginBottom: '20px',
   },
 };
 
