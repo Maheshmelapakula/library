@@ -2,6 +2,7 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const cors = require('cors')
+const bodyParser = require('body-parser')
 
 
 
@@ -14,7 +15,7 @@ const { authentication } = require('./middlewares/authenticate.middleware');
 
 const app = express()
 app.use(express.json())
-// app.use(bodyParser.json())
+app.use(bodyParser.json())
 
 app.use(cors({
     origin:"*"
@@ -59,8 +60,8 @@ app.post('/login', async(req,res)=>{
 
 })
 
-app.use(authentication)
 
+app.use('/books', bookRouter);
 
 
 

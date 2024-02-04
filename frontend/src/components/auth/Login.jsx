@@ -1,5 +1,5 @@
-// components/auth/Login.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 
 const Login = () => {
@@ -7,6 +7,8 @@ const Login = () => {
     studentId: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,14 +24,13 @@ const Login = () => {
     try {
       await authService.login(loginData);
       console.log('Login successful');
-      // Show an alert after successful login
-      alert('Login successful!');
+      navigate('/books'); // Redirect to BooksPage after successful login
     } catch (error) {
       console.error('Login failed', error.message);
-      // Show an alert for login failure
       alert('Login failed. Please check your credentials.');
     }
   };
+
 
   return (
     <div style={styles.container}>

@@ -1,73 +1,113 @@
-const express = require("express")
-const jwt = require("jsonwebtoken")
-const {BookModel} = require("../model/Book.model");
-const { UserModel } = require("../model/User.model");
-const { authentication } = require("../middlewares/authenticate.middleware");
-// const {checkUserRole} = require("../middlewares/checkUserRole");
+const express = require('express')
 
-const bookRouter = express.Router();
+const bookRouter = express.Router()
 
-bookRouter.get("/", async (req, res) => {
-    const books = await BookModel.find()
-    res.send({books : books})
+const {BookModel} = require('../model/Book.model')
+
+bookRouter.get('/', (req, res) => {
+    res.send({msg:"books"})
 })
 
-bookRouter.post("/create", async (req, res) => {
+
+
+bookRouter.post('/create', (req, res) => {
     try {
-      const { title, author } = req.body;
-      
-      // You can add additional validation for title and author here if needed
-      
-      const book = await authentication.createBook({ title, author });
-      res.status(201).json(book);
+      const { title, author, journal } = req.body;
+  
+      // Validate the presence of required parameters (title and author)
+      if (!title || !author) {
+        return res.status(400).json({ message: 'Title and Author are required parameters.' });
+      }
+  
+      // Create the book (assuming you have a BookModel)
+      const newBook = new BookModel({ title, author, journal });
+      newBook.save();
+  
+      res.status(201).json({ message: 'Book created successfully', book: newBook });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
   });
 
-
-bookRouter.patch("/edit/:bookID", async (req, res) => {
-        const bookID = req.params.bookID
-        const payload = req.body;
-
-        const userID = req.userID
-        const user = await UserModel.findOne({_id : userID})
-        const user_email = user.email;
-
-        const book = await BookModel.findOne({_id : bookID})
-        const author_email = book.author_email
-
-        console.log(user_email,author_email)
-
-        if(user_email !== author_email){
-            return res.send({msg : "You are not authorised to do this operation"})
-        }
-        else{
-            await BookModel.findByIdAndUpdate(bookID, payload)
-            return res.send({msg : "Book updated"})
-        }
-})
+//   bookRouter.get('/', async (req, res) => {
+//     try {
+//       const books = await BookModel.find();
+//       res.status(200).json(books);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: 'Internal Server Error' });
+//     }
+//   });
 
 
-bookRouter.delete("/delete/:bookID", async (req, res) => {
-    const bookID = req.params.bookID
 
-    const userID = req.userID
-    const user = await UserModel.findOne({_id : userID})
-    const user_email = user.email;
 
-    const book = await BookModel.findOne({_id : bookID})
-    const author_email = book.author_email
-
-    console.log(user_email,author_email)
-    if(user_email !== author_email){
-        return res.send({msg : "You are not authorised to do this operation"})
+// Assuming you want to get all books
+// Assuming you want to get all books
+bookRouter.get('/allbooks', async (req, res) => {
+    try {
+      const books = await BookModel.find();
+  
+      if (!books || books.length === 0) {
+        return res.status(404).json({ message: 'No books found' });
+      }
+  
+      res.status(200).json(books);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-    else{
-        await BookModel.findByIdAndDelete(bookID)
-        return res.send({msg : "Book deleted"})
-    }
-})
+  });
+  
+  
+
+//   bookRouter.put('/books/update/:id', async (req, res) => {
+//     try {
+//       const { title, author, journal } = req.body;
+  
+//       // Validate the presence of required parameters (title and author)
+//       if (!title || !author) {
+//         return res.status(400).json({ message: 'Title and Author are required parameters.' });
+//       }
+  
+//       const updatedBook = await BookModel.findByIdAndUpdate(
+//         req.params.id,
+//         { title, author, journal },
+//         { new: true } // Return the updated document
+//       );
+  
+//       if (!updatedBook) {
+//         return res.status(404).json({ message: 'Book not found' });
+//       }
+  
+//       res.status(200).json({ message: 'Book updated successfully', book: updatedBook });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: 'Internal Server Error' });
+//     }
+//   });
+  
+//   bookRouter.delete('/:id', async (req, res) => {
+//     try {
+//       const deletedBook = await BookModel.findByIdAndDelete(req.params.id);
+  
+//       if (!deletedBook) {
+//         return res.status(404).json({ message: 'Book not found' });
+//       }
+  
+//       res.status(200).json({ message: 'Book deleted successfully' });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: 'Internal Server Error' });
+//     }
+//   });
+  
+  
+  
+
+  
+  
+  
 
 module.exports = {bookRouter}
