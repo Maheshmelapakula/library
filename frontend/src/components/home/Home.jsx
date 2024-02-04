@@ -19,9 +19,9 @@ const Home = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Welcome to Your Online Library</h2>
+      <h2 style={styles.heading}>Welcome to the worlds Greatest Online Library</h2>
       <p style={styles.text}>
-        Explore the amazing features of our platform. If you are new, register here. Otherwise, login.
+        Explore the amazing books from our library. If you are new, register here. Otherwise, login.
       </p>
       {showRegisterForm && <Registration />}
       {showLoginForm && <Login />}

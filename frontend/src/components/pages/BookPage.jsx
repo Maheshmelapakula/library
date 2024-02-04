@@ -1,4 +1,3 @@
-// components/BooksPage.js
 import React, { useState, useEffect } from 'react';
 import { getAllBooks, createBook, deleteBook } from '../services/BookService';
 
@@ -7,6 +6,9 @@ const BooksPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newBookData, setNewBookData] = useState({ title: '', author: '', journal: '' });
   const [editBookId, setEditBookId] = useState(null);
+  const [filter, setFilter] = useState(''); // Filter criteria
+  const [sortBy, setSortBy] = useState('title'); // Default sorting by title
+  const [sortOrder, setSortOrder] = useState('asc'); // Default sorting order
 
   useEffect(() => {
     fetchBooks();
@@ -76,12 +78,85 @@ const BooksPage = () => {
     }));
   };
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const handleOrderChange = (e) => {
+    setSortOrder(e.target.value);
+  };
+
+  // Apply filtering based on title, author, or journal
+  const filteredBooks = books.filter((book) => {
+    return (
+      (book.title && book.title.toLowerCase().includes(filter.toLowerCase())) ||
+      (book.author && book.author.toLowerCase().includes(filter.toLowerCase())) ||
+      (book.journal && book.journal.toLowerCase().includes(filter.toLowerCase()))
+    );
+  });
+
+  // Apply filtering based on title, author, or journal
+// const filteredBooks = books
+// .filter((book) => {
+//   return (
+//     (book.title && book.title.toLowerCase().includes(filter.toLowerCase())) ||
+//     (book.author && book.author.toLowerCase().includes(filter.toLowerCase())) ||
+//     (book.journal && book.journal.toLowerCase().includes(filter.toLowerCase()))
+//   );
+// })
+// .filter((book) => {
+//   // Filter books created within the last 10 minutes
+//   const creationTimestamp = new Date(book.createdAt).getTime();
+//   const currentTimestamp = new Date().getTime();
+//   const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+//   if (currentTimestamp - creationTimestamp <= tenMinutesInMilliseconds) {
+//     return true; // Book created within the last 10 minutes
+//   }
+
+//   return false;
+// });
+
+  
+  // Apply sorting based on sortBy and sortOrder
+  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    const aValue = a[sortBy] || ''; // Use an empty string if the property is undefined
+    const bValue = b[sortBy] || ''; // Use an empty string if the property is undefined
+  
+    // Compare the values using localeCompare
+    return aValue.localeCompare(bValue);
+  });
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Books</h1>
       <button style={styles.createButton} onClick={handleCreateModalOpen}>
         Create Book
       </button>
+      <div style={styles.filters}>
+        <label>
+          Filter:
+          <input type="text" value={filter} onChange={handleFilterChange} />
+        </label>
+        <label>
+          Sort By:
+          <select value={sortBy} onChange={handleSortChange}>
+            <option value="title">Title</option>
+            <option value="author">Author</option>
+            <option value="journal">Journal</option>
+          </select>
+        </label>
+        <label>
+          Order:
+          <select value={sortOrder} onChange={handleOrderChange}>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </label>
+      </div>
       <table style={styles.table}>
         <thead>
           <tr>
@@ -92,7 +167,7 @@ const BooksPage = () => {
           </tr>
         </thead>
         <tbody>
-          {books.map((book) => (
+          {sortedBooks.map((book) => (
             <tr key={book._id}>
               <td>{book.title}</td>
               <td>{book.author}</td>
@@ -159,6 +234,7 @@ const BooksPage = () => {
     </div>
   );
 };
+
 const styles = {
   container: {
     maxWidth: '800px',
@@ -224,6 +300,9 @@ const styles = {
     padding: '8px 12px',
     border: 'none',
     cursor: 'pointer',
+  },
+  filters: {
+    marginBottom: '20px',
   },
 };
 
